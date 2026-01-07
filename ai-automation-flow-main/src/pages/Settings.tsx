@@ -1072,7 +1072,7 @@ const Settings = () => {
         </div>
       </header>
 
-      <main className="container px-4 py-8 max-w-7xl mx-auto w-full relative">
+        <main className="container px-4 py-8 max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1199,7 +1199,7 @@ const Settings = () => {
               </Button>
             </div>
           ) : (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {filteredProviders.map((provider) => {
               const connected = isConnected(provider.id);
 
@@ -1210,7 +1210,8 @@ const Settings = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.2 }}
-                  className="glass rounded-xl p-6 flex flex-col h-full border border-white/10 hover:border-primary/30 transition-all shadow-lg hover:shadow-primary/5"
+                  className="glass rounded-xl p-6 flex flex-col min-h-[260px] overflow-hidden"
+
                 >
                   <div className="flex items-start justify-between gap-4 mb-6">
                     <div className="flex items-center gap-4 min-w-0 flex-1">
@@ -1219,7 +1220,7 @@ const Settings = () => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <h3 className="font-bold text-lg truncate tracking-tight">{provider.display_name}</h3>
+                          <h3 className="font-bold text-lg leading-tight line-clamp-2"></h3>
                           {provider.id.startsWith("custom_") && (
                             <Badge variant="secondary" className="text-[10px] h-4 uppercase font-bold tracking-wider">Custom</Badge>
                           )}
@@ -1273,7 +1274,7 @@ const Settings = () => {
                     </div>
                   </div>
 
-                  <div className="flex-1 flex flex-col justify-between gap-6">
+                    <div className="flex-1 flex flex-col gap-4">
                     <div className="flex flex-wrap gap-2">
                       {connected ? (
                         <div className="flex items-center justify-between w-full bg-success/5 border border-success/20 rounded-lg p-3">
