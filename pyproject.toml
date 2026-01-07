@@ -1,0 +1,13 @@
+[project]
+name = "repl-nix-workspace"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "croniter>=6.0.0",
+    "flask>=3.1.2",
+    "flask-apscheduler>=1.13.1",
+    "flask-cors>=6.0.2",
+    "openai>=2.14.0",
+    "requests>=2.32.5",
+]
