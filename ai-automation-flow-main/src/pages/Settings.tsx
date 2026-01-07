@@ -1199,53 +1199,55 @@ const Settings = () => {
               </Button>
             </div>
           ) : (
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {filteredProviders.map((provider) => {
               const connected = isConnected(provider.id);
 
               return (
                 <motion.div
                   key={provider.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="glass rounded-xl p-5 min-w-0 flex flex-col relative"
-                  style={{ zIndex: 1 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="glass rounded-xl p-6 flex flex-col h-full border border-white/10 hover:border-primary/30 transition-all shadow-lg hover:shadow-primary/5"
                 >
-                  <div className="flex items-start justify-between mb-4 flex-shrink-0">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                  <div className="flex items-start justify-between gap-4 mb-6">
+                    <div className="flex items-center gap-4 min-w-0 flex-1">
+                      <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 border border-primary/20">
                         {getIcon(provider.icon)}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-semibold truncate">{provider.display_name}</h3>
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <h3 className="font-bold text-lg truncate tracking-tight">{provider.display_name}</h3>
                           {provider.id.startsWith("custom_") && (
-                            <Badge variant="outline" className="text-xs flex-shrink-0">Custom</Badge>
+                            <Badge variant="secondary" className="text-[10px] h-4 uppercase font-bold tracking-wider">Custom</Badge>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {provider.auth_type === "oauth" ? "OAuth" : "API Key"}
+                        <p className="text-sm text-muted-foreground/80 font-medium">
+                          {provider.auth_type === "oauth" ? "OAuth 2.0" : "API Key Auth"}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
                       {provider.id.startsWith("custom_") && (
                         <>
                           <Button
                             variant="ghost"
-                            size="sm"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
                             onClick={() => {
                               setEditingCustomIntegration(provider);
                               setIsCustomIntegrationModalOpen(true);
                             }}
-                            title="Edit custom integration"
                           >
                             <Settings className="w-4 h-4" />
                           </Button>
                           <Button
                             variant="ghost"
-                            size="sm"
+                            size="icon"
+                            className="h-8 w-8 text-destructive/70 hover:text-destructive hover:bg-destructive/10"
                             onClick={() => {
                               const customIntegrations: Provider[] = JSON.parse(
                                 localStorage.getItem("custom_integrations") || "[]"
@@ -1263,31 +1265,36 @@ const Settings = () => {
                                 description: `${provider.display_name} has been removed.`,
                               });
                             }}
-                            title="Delete custom integration"
-                            className="text-destructive hover:text-destructive"
                           >
                             <X className="w-4 h-4" />
                           </Button>
                         </>
                       )}
+                    </div>
+                  </div>
+
+                  <div className="flex-1 flex flex-col justify-between gap-6">
+                    <div className="flex flex-wrap gap-2">
                       {connected ? (
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-success flex items-center gap-1">
-                            <Check className="w-4 h-4" />
+                        <div className="flex items-center justify-between w-full bg-success/5 border border-success/20 rounded-lg p-3">
+                          <span className="text-sm font-semibold text-success flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                             Connected
                           </span>
                           <Button
                             variant="ghost"
                             size="sm"
+                            className="h-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                             onClick={() => handleDisconnect(provider.id)}
                           >
-                            <Unlink className="w-4 h-4" />
+                            <Unlink className="w-4 h-4 mr-2" />
+                            Disconnect
                           </Button>
                         </div>
                       ) : (
                         <Button
-                          variant="outline"
-                          size="sm"
+                          variant="secondary"
+                          className="w-full font-semibold shadow-sm hover:shadow-md transition-all h-10"
                           onClick={() => handleConnect(provider)}
                         >
                           {provider.auth_type === "oauth" ? (
@@ -1295,29 +1302,28 @@ const Settings = () => {
                           ) : (
                             <Key className="w-4 h-4 mr-2" />
                           )}
-                          Connect
+                          Connect {provider.display_name}
                         </Button>
                       )}
                     </div>
-                  </div>
 
-                  {/* Actions list */}
-                  <div className="mt-auto pt-4 border-t border-border">
-                    <p className="text-xs text-muted-foreground mb-2">Available actions:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {(provider.actions as any[])?.slice(0, 3).map((action: any) => (
-                        <span
-                          key={action.id}
-                          className="text-xs px-2 py-0.5 rounded-full bg-secondary text-muted-foreground whitespace-nowrap"
-                        >
-                          {action.name}
-                        </span>
-                      ))}
-                      {(provider.actions as any[])?.length > 3 && (
-                        <span className="text-xs text-muted-foreground whitespace-nowrap">
-                          +{(provider.actions as any[]).length - 3} more
-                        </span>
-                      )}
+                    <div className="pt-4 border-t border-white/5">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-3">Capabilities</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(provider.actions as any[])?.slice(0, 4).map((action: any) => (
+                          <span
+                            key={action.id}
+                            className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-white/5 text-muted-foreground border border-white/5"
+                          >
+                            {action.name}
+                          </span>
+                        ))}
+                        {(provider.actions as any[])?.length > 4 && (
+                          <span className="text-[11px] font-bold text-muted-foreground/50 px-1">
+                            +{(provider.actions as any[]).length - 4}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
