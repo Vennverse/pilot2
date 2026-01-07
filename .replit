@@ -1,0 +1,36 @@
+modules = ["python-3.11", "nodejs-20"]
+[nix]
+channel = "stable-25_05"
+packages = ["unzip"]
+
+[agent]
+expertMode = true
+integrations = ["python_openai_ai_integrations:1.0.0", "python_openrouter_ai_integrations:1.0.0"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Unified App Server"
+
+[[workflows.workflow]]
+name = "Unified App Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash -c \"cd ai-automation-flow-main && npm run dev & cd ai-automation-flow-main/server && python app.py\""
+waitForPort = 5000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
