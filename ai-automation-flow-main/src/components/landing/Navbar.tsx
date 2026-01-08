@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Zap, Menu, X } from "lucide-react";
+import { MessageCircle, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -17,31 +17,37 @@ export const Navbar = () => {
       <div className="glass border-b border-border/50">
         <div className="container px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
+            {/* Logo with motto */}
+            <Link to="/" className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center">
-                <Zap className="w-5 h-5 text-primary" />
+                <MessageCircle className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-xl font-bold">FlowPilot</span>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold leading-tight">Ask</span>
+                <span className="text-xs text-muted-foreground font-medium">Just Ask</span>
+              </div>
             </Link>
 
             {/* Desktop nav */}
             <div className="hidden md:flex items-center gap-8">
-              <Link to="/#features" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/#features" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
                 Features
               </Link>
-              <Link to="/#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
                 How it Works
               </Link>
+              <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
+                Pricing
+              </a>
             </div>
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-3">
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" asChild className="text-sm">
                 <Link to="/auth">Sign In</Link>
               </Button>
-              <Button variant="hero" asChild>
-                <Link to="/dashboard">Get Started</Link>
+              <Button variant="hero" asChild className="text-sm">
+                <Link to="/dashboard">Try Now</Link>
               </Button>
             </div>
 

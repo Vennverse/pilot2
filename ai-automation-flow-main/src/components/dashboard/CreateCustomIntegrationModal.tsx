@@ -182,10 +182,15 @@ export const CreateCustomIntegrationModal = ({
     setSaving(true);
 
     try {
-      const integration: Provider = {
-        id: editingIntegration?.id || `custom_${name.toLowerCase().replace(/\s+/g, "_")}`,
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) {
+        throw new Error("User not authenticated");
+      }
+
+      const integrationData = {
         name: name.toLowerCase().replace(/\s+/g, "_"),
         display_name: displayName,
+        description: description,
         auth_type: authType,
         oauth_config: {
           base_url: baseUrl,
@@ -196,40 +201,46 @@ export const CreateCustomIntegrationModal = ({
           id: a.id,
           name: a.name,
           description: a.description,
+          method: a.method,
+          endpoint: a.endpoint,
           params: a.params,
         })),
-        icon: "Puzzle",
-        created_at: new Date().toISOString(),
       };
 
-      // Save to Supabase or local storage
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // In production, save to database
-        // For now, we'll use local storage for custom integrations
-        const customIntegrations = JSON.parse(
-          localStorage.getItem("custom_integrations") || "[]"
-        );
-        const existingIndex = customIntegrations.findIndex(
-          (i: Provider) => i.id === integration.id
-        );
+      // Save to database via API
+      const url = editingIntegration
+        ? `/api/custom-integrations/${editingIntegration.id}?user_id=${session.user.id}`
+        : `/api/custom-integrations?user_id=${session.user.id}`;
 
-        if (existingIndex >= 0) {
-          customIntegrations[existingIndex] = integration;
-        } else {
-          customIntegrations.push(integration);
-        }
+      const response = await fetch(url, {
+        method: editingIntegration ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(integrationData),
+      });
 
-        localStorage.setItem(
-          "custom_integrations",
-          JSON.stringify(customIntegrations)
-        );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to save integration");
       }
 
-      onSave(integration);
+      const savedIntegration = await response.json();
+
+      // Format for Provider type
+      const provider: Provider = {
+        id: savedIntegration.id,
+        name: savedIntegration.name,
+        display_name: savedIntegration.display_name,
+        auth_type: savedIntegration.auth_type,
+        oauth_config: savedIntegration.oauth_config || {},
+        actions: savedIntegration.actions || [],
+        icon: "Puzzle",
+        created_at: savedIntegration.created_at,
+      };
+
+      onSave(provider);
       toast({
-        title: "Integration created!",
-        description: `${displayName} has been added successfully.`,
+        title: editingIntegration ? "Integration updated!" : "Integration created!",
+        description: `${displayName} has been saved successfully.`,
       });
       resetForm();
       onClose();
@@ -237,7 +248,7 @@ export const CreateCustomIntegrationModal = ({
       console.error("Save integration error:", error);
       toast({
         title: "Error",
-        description: "Failed to save custom integration",
+        description: error instanceof Error ? error.message : "Failed to save custom integration",
         variant: "destructive",
       });
     } finally {

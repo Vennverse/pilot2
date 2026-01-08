@@ -1,0 +1,63 @@
+{
+  "name": "Monthly Financial Report",
+  "description": "Reconcile accounts, generate P&L, and send to stakeholders",
+  "tags": ["finance", "reporting", "accounting"],
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Reconcile all accounts",
+      "provider": "stripe",
+      "action": "reconcile_accounts",
+      "parameters": {
+        "account": "all",
+        "period": "current_month"
+      }
+    },
+    {
+      "id": "step_2",
+      "name": "Generate P&L report",
+      "provider": "quickbooks",
+      "action": "generate_report",
+      "parameters": {
+        "report_type": "profit_loss",
+        "period": "current_month"
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_3",
+      "name": "Calculate taxes",
+      "provider": "quickbooks",
+      "action": "calculate_taxes",
+      "parameters": {
+        "period": "current_month",
+        "jurisdiction": "US"
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_4",
+      "name": "Create comprehensive report",
+      "provider": "openai",
+      "action": "compile_report",
+      "parameters": {
+        "financial_data": "step_2",
+        "tax_data": "step_3",
+        "format": "executive_summary"
+      },
+      "depends_on": ["step_2", "step_3"]
+    },
+    {
+      "id": "step_5",
+      "name": "Send report to stakeholders",
+      "provider": "sendgrid",
+      "action": "send_email",
+      "parameters": {
+        "recipients": "stakeholders",
+        "subject": "Monthly Financial Report",
+        "attachment": "step_4"
+      },
+      "depends_on": "step_4"
+    }
+  ]
+}

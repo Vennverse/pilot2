@@ -1,0 +1,49 @@
+{
+  "name": "Support Ticket Auto-Response",
+  "description": "Classify tickets, search knowledge base, and auto-respond to common issues",
+  "tags": ["support", "tickets", "automation"],
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Classify support issue",
+      "provider": "openai",
+      "action": "classify_issue",
+      "parameters": {
+        "categories": ["billing", "technical", "feature_request", "account", "other"]
+      }
+    },
+    {
+      "id": "step_2",
+      "name": "Search knowledge base",
+      "provider": "zendesk",
+      "action": "search_knowledge_base",
+      "parameters": {
+        "limit": 5
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_3",
+      "name": "Create support ticket",
+      "provider": "zendesk",
+      "action": "create_ticket",
+      "parameters": {
+        "category": "step_1",
+        "priority": "normal"
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_4",
+      "name": "Send customer response",
+      "provider": "sendgrid",
+      "action": "send_email",
+      "parameters": {
+        "template": "support_response",
+        "knowledge_base_articles": "step_2",
+        "ticket_id": "step_3"
+      },
+      "depends_on": ["step_2", "step_3"]
+    }
+  ]
+}

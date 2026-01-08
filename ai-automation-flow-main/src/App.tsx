@@ -10,6 +10,13 @@ import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
 import WorkflowEditor from "./pages/WorkflowEditor";
 import NotFound from "./pages/NotFound";
+import Pricing from "./pages/Pricing";
+import TeamSettings from "./pages/TeamSettings";
+import Analytics from "./pages/Analytics";
+import Marketplace from "./pages/Marketplace";
+import ExecutionMonitor from "./pages/ExecutionMonitor";
+import CodeEditor from "./pages/CodeEditor";
+import AgentInterface from "./pages/AgentInterface";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +33,13 @@ const App = () => (
             <Route path="/workflow/:id" element={<WorkflowEditor />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/team" element={<TeamSettings />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/monitoring" element={<ExecutionMonitor />} />
+            <Route path="/code" element={<CodeEditor />} />
+            <Route path="/agents" element={<AgentInterface />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

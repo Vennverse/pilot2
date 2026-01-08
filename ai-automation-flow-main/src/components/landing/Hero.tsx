@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, MessageCircle, Lightbulb, Zap, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -37,8 +37,8 @@ export const Hero = () => {
             transition={{ delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
           >
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-muted-foreground">AI-Powered Automation Platform</span>
+            <MessageCircle className="w-4 h-4 text-primary" />
+            <span className="text-sm text-muted-foreground">Just Ask. AI Builds. You Automate.</span>
           </motion.div>
 
           {/* Main heading */}
@@ -46,10 +46,10 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+            className="text-6xl md:text-8xl font-bold leading-tight mb-6"
           >
-            Describe it.{" "}
-            <span className="text-gradient glow-text">Automate it.</span>
+            Just{" "}
+            <span className="text-gradient glow-text">Ask</span>
           </motion.h1>
 
           {/* Subheading */}
@@ -57,10 +57,10 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto"
+            className="text-2xl md:text-3xl font-light text-muted-foreground mb-10 max-w-3xl mx-auto"
           >
-            Transform plain English into powerful automations. 
-            Just describe what you want, preview the workflow, and let AI handle the rest.
+            Tell us what you want to automate. In plain English. <br/>
+            <span className="text-primary font-semibold">AI builds the workflow. You approve and automate.</span>
           </motion.p>
 
           {/* CTA Buttons */}
@@ -68,20 +68,39 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
           >
             <Button variant="hero" size="xl" asChild>
               <Link to="/dashboard">
-                Start Automating
+                <MessageCircle className="w-5 h-5" />
+                Try It Now
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>
             <Button variant="hero-outline" size="xl" asChild>
               <Link to="/auth">
-                Sign Up Free
                 <Zap className="w-5 h-5" />
+                Get Started Free
               </Link>
             </Button>
+          </motion.div>
+
+          {/* Quick benefits */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="flex flex-wrap gap-4 justify-center mb-16"
+          >
+            {[
+              "✨ No code needed",
+              "🚀 60 seconds to automate",
+              "🔗 100+ integrations",
+            ].map((benefit, index) => (
+              <div key={index} className="flex items-center gap-2 px-4 py-2 rounded-lg glass">
+                <span className="text-sm font-medium">{benefit}</span>
+              </div>
+            ))}
           </motion.div>
 
           {/* Stats */}
@@ -89,15 +108,15 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
+            className="mt-8 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           >
             {[
-              { value: "10x", label: "Faster Setup" },
-              { value: "100+", label: "Integrations" },
-              { value: "0", label: "Code Required" },
+              { value: "Ask", label: "Describe What You Want" },
+              { value: "Build", label: "AI Creates Workflow" },
+              { value: "Run", label: "One-Click Automation" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gradient">{stat.value}</div>
+                <div className="text-2xl md:text-3xl font-bold text-gradient">{stat.value}</div>
                 <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
               </div>
             ))}

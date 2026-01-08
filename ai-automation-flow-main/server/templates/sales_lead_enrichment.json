@@ -1,0 +1,53 @@
+{
+  "name": "Lead Enrichment & Outreach",
+  "description": "Find, enrich, and automatically reach out to qualified leads",
+  "tags": ["sales", "outreach", "leads"],
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Search for target companies",
+      "provider": "hubspot",
+      "action": "search_contacts",
+      "parameters": {
+        "query": "tech companies",
+        "limit": 20
+      }
+    },
+    {
+      "id": "step_2",
+      "name": "Enrich company information",
+      "provider": "clearbit",
+      "action": "enrich_leads",
+      "parameters": {
+        "leads_from_step": "step_1",
+        "enrich_company": true,
+        "enrich_person": true
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_3",
+      "name": "Send personalized emails",
+      "provider": "sendgrid",
+      "action": "send_campaign",
+      "parameters": {
+        "recipients": "step_2",
+        "template": "cold_outreach",
+        "personalization_fields": ["first_name", "company_name", "job_title"]
+      },
+      "depends_on": "step_2"
+    },
+    {
+      "id": "step_4",
+      "name": "Create follow-up tasks",
+      "provider": "hubspot",
+      "action": "create_bulk_tasks",
+      "parameters": {
+        "contacts": "step_1",
+        "description": "Follow up on outreach email",
+        "due_days": 5
+      },
+      "depends_on": "step_3"
+    }
+  ]
+}

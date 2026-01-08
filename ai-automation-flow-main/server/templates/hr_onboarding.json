@@ -1,0 +1,60 @@
+{
+  "name": "Employee Onboarding",
+  "description": "Create employee record, send forms, schedule training, and notify team",
+  "tags": ["hr", "onboarding", "recruitment"],
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Create employee record",
+      "provider": "workday",
+      "action": "create_employee",
+      "parameters": {
+        "auto_notify": true,
+        "setup_email": true
+      }
+    },
+    {
+      "id": "step_2",
+      "name": "Send onboarding forms",
+      "provider": "docusign",
+      "action": "send_forms",
+      "parameters": {
+        "forms": ["W-4", "I-9", "Direct Deposit", "Emergency Contact", "Benefits Enrollment"]
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_3",
+      "name": "Schedule orientation",
+      "provider": "google_calendar",
+      "action": "schedule_event",
+      "parameters": {
+        "event_type": "orientation",
+        "duration_hours": 4
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_4",
+      "name": "Assign mentor and notify team",
+      "provider": "slack",
+      "action": "send_message",
+      "parameters": {
+        "channel": "onboarding",
+        "notify_team": true,
+        "notify_mentors": true
+      },
+      "depends_on": "step_1"
+    },
+    {
+      "id": "step_5",
+      "name": "Setup IT access",
+      "provider": "okta",
+      "action": "provision_user",
+      "parameters": {
+        "groups": ["employees", "standard_access"]
+      },
+      "depends_on": "step_1"
+    }
+  ]
+}

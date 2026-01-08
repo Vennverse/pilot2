@@ -1,0 +1,62 @@
+{
+  "name": "Marketing Email Campaign",
+  "description": "Create, segment audience, and send marketing email campaign",
+  "tags": ["marketing", "email", "campaign"],
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Generate email content",
+      "provider": "openai",
+      "action": "generate_content",
+      "parameters": {
+        "type": "email_marketing",
+        "tone": "professional_friendly",
+        "length": "medium"
+      }
+    },
+    {
+      "id": "step_2",
+      "name": "Get audience segment",
+      "provider": "hubspot",
+      "action": "get_contacts",
+      "parameters": {
+        "segment": "marketing_engaged",
+        "limit": 5000
+      }
+    },
+    {
+      "id": "step_3",
+      "name": "Create Mailchimp campaign",
+      "provider": "mailchimp",
+      "action": "create_campaign",
+      "parameters": {
+        "name": "Marketing Campaign",
+        "recipients": "step_2",
+        "content": "step_1"
+      },
+      "depends_on": ["step_1", "step_2"]
+    },
+    {
+      "id": "step_4",
+      "name": "Send campaign",
+      "provider": "mailchimp",
+      "action": "send_campaign",
+      "parameters": {
+        "campaign_id": "step_3"
+      },
+      "depends_on": "step_3"
+    },
+    {
+      "id": "step_5",
+      "name": "Track performance",
+      "provider": "google_analytics",
+      "action": "track_campaign",
+      "parameters": {
+        "campaign_id": "step_3",
+        "track_clicks": true,
+        "track_conversions": true
+      },
+      "depends_on": "step_4"
+    }
+  ]
+}

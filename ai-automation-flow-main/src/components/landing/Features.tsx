@@ -1,36 +1,37 @@
 import { motion } from "framer-motion";
-import { Brain, Eye, Shield, Zap, Workflow, Clock } from "lucide-react";
+import { MessageSquare, Sparkles, CheckCircle2, Zap, Lock, Gauge } from "lucide-react";
 
 const features = [
   {
-    icon: Brain,
-    title: "Natural Language Input",
-    description: "Describe your automation in plain English. No coding, no complex interfaces—just tell us what you need.",
+    icon: MessageSquare,
+    title: "Just Ask in English",
+    description: "Type what you want to automate in natural language. No coding, no technical knowledge required. Pure simplicity.",
+    highlight: true,
   },
   {
-    icon: Eye,
-    title: "Visual Preview",
-    description: "See exactly what will happen before it runs. Review every step and approve with confidence.",
+    icon: Sparkles,
+    title: "AI Builds Your Workflow",
+    description: "Our AI instantly creates a complete automation plan. From API calls to conditional logic, it figures it out.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Review & Approve",
+    description: "See exactly what will run. Tweak any step. Add more integrations. Full transparency, zero surprises.",
   },
   {
     icon: Zap,
-    title: "Instant Execution",
-    description: "One-click approval triggers your automation. Watch it work in real-time with detailed logs.",
+    title: "Execute in One Click",
+    description: "Approve and your automation runs immediately. Watch live logs. Know exactly what's happening.",
   },
   {
-    icon: Workflow,
-    title: "Smart Connections",
-    description: "Connect to 100+ apps and services. From email to CRM, we integrate with your entire stack.",
+    icon: Gauge,
+    title: "100+ Integrations",
+    description: "Connect your entire stack. Slack, Stripe, Google Sheets, Salesforce, Notion, and 95+ more services.",
   },
   {
-    icon: Clock,
-    title: "Scheduled & Triggered",
-    description: "Run automations on schedule or trigger them from events. Full control over when things happen.",
-  },
-  {
-    icon: Shield,
-    title: "Enterprise Security",
-    description: "Your data stays safe with end-to-end encryption and SOC 2 compliant infrastructure.",
+    icon: Lock,
+    title: "Enterprise-Grade Security",
+    description: "Encrypted credentials. Role-based access. Audit logs. Your data is yours and stays safe.",
   },
 ];
 

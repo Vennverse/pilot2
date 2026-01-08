@@ -167,16 +167,28 @@ const Settings = () => {
 
   const fetchProviders = async () => {
     try {
-      // Load custom integrations from localStorage
+      // Load custom integrations from database
       let customIntegrations: Provider[] = [];
-      try {
-        const stored = localStorage.getItem("custom_integrations");
-        if (stored) {
-          customIntegrations = JSON.parse(stored);
+      if (user?.id) {
+        try {
+          const response = await fetch(`/api/custom-integrations?user_id=${user.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            customIntegrations = data.map((integration: any) => ({
+              id: integration.id,
+              name: integration.name,
+              display_name: integration.display_name,
+              auth_type: integration.auth_type,
+              oauth_config: integration.oauth_config || {},
+              actions: integration.actions || [],
+              icon: "Puzzle",
+              created_at: integration.created_at,
+            }));
+          }
+        } catch (error) {
+          console.error("Error loading custom integrations from database:", error);
+          customIntegrations = [];
         }
-      } catch (error) {
-        console.error("Error loading custom integrations:", error);
-        customIntegrations = [];
       }
 
       // Providers with OAuth support
@@ -1249,22 +1261,28 @@ const Settings = () => {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 text-destructive/70 hover:text-destructive hover:bg-destructive/10"
-                            onClick={() => {
-                              const customIntegrations: Provider[] = JSON.parse(
-                                localStorage.getItem("custom_integrations") || "[]"
-                              );
-                              const updated = customIntegrations.filter(
-                                (p) => p.id !== provider.id
-                              );
-                              localStorage.setItem(
-                                "custom_integrations",
-                                JSON.stringify(updated)
-                              );
-                              fetchProviders();
-                              toast({
-                                title: "Integration deleted",
-                                description: `${provider.display_name} has been removed.`,
-                              });
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(
+                                  `/api/custom-integrations/${provider.id}?user_id=${user?.id}`,
+                                  { method: "DELETE" }
+                                );
+                                if (response.ok) {
+                                  fetchProviders();
+                                  toast({
+                                    title: "Integration deleted",
+                                    description: `${provider.display_name} has been removed.`,
+                                  });
+                                } else {
+                                  throw new Error("Failed to delete");
+                                }
+                              } catch (error) {
+                                toast({
+                                  title: "Error",
+                                  description: "Failed to delete integration",
+                                  variant: "destructive",
+                                });
+                              }
                             }}
                           >
                             <X className="w-4 h-4" />
